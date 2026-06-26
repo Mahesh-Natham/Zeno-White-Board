@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-color: #ffffff;
+    --text-color: #0f172a;
+    --border-color: #e2e8f0;
+    --glass-bg: rgba(255, 255, 255, 0.8);
+  }
+
+  .dark {
+    --bg-color: #020617; /* slate-950 */
+    --text-color: #f8fafc;
+    --border-color: #1e293b;
+    --glass-bg: rgba(15, 23, 42, 0.7); /* slate-900 with opacity */
+  }
+
+  body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+}
+
+/* Force Konva to respect container cursor */
+.konvajs-content {
+  cursor: inherit !important;
+}
+.konvajs-content canvas {
+  cursor: inherit !important;
+}
+
+/* Force pointer-events none on the element and all its children */
+.pointer-events-none-all,
+.pointer-events-none-all * {
+  pointer-events: none !important;
+}
