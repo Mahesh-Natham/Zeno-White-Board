@@ -314,8 +314,26 @@ export function useCanvasDrawing({
       return;
     }
 
-    if (activeTool === TOOLS.STICKY_NOTE || activeTool === TOOLS.TEXT || activeTool === TOOLS.TIMELINE || activeTool === TOOLS.KANBAN || activeTool === TOOLS.TABLE) {
+    if (activeTool === TOOLS.REACTION) {
+      const reactionElement = createDefaultElement(TOOLS.TEXT, pos.x, pos.y, userId, defaultStyles);
+      reactionElement.text = useToolStore.getState().selectedReaction;
+      reactionElement.fontSize = 48;
+      reactionElement.width = 60;
+      reactionElement.height = 60;
+      reactionElement.fill = 'transparent';
+      reactionElement.stroke = 'transparent';
+      addElement(reactionElement);
+      setActiveTool(TOOLS.SELECT);
+      return;
+    }
+
+    if (activeTool === TOOLS.STICKY_NOTE || activeTool === TOOLS.TEXT || activeTool === TOOLS.TIMELINE || activeTool === TOOLS.KANBAN || activeTool === TOOLS.TABLE || activeTool === TOOLS.DOC) {
       // One-click creation tools
+      if (activeTool === TOOLS.DOC) {
+        newElement.width = 600;
+        newElement.height = 800;
+        newElement.content = '';
+      }
       addElement(newElement);
       
       if (activeTool === TOOLS.STICKY_NOTE || activeTool === TOOLS.TEXT) {
@@ -484,8 +502,19 @@ export function useCanvasDrawing({
           ...previewElement,
           points: [0, 0, pos.x - previewElement.x, pos.y - previewElement.y],
         });
+      } else if (activeTool === 'block_arrow') {
+        const dx = pos.x - previewElement.x;
+        const dy = pos.y - previewElement.y;
+        const length = Math.sqrt(dx * dx + dy * dy);
+        const rotation = (Math.atan2(dy, dx) * 180) / Math.PI;
+        setPreviewElement({
+          ...previewElement,
+          width: length,
+          height: Math.max(20, Math.min(150, length * 0.4)),
+          rotation: rotation,
+        });
       } else {
-        // Shapes (Rect, Circle, Triangle, Frame, Block Arrow)
+        // Shapes (Rect, Circle, Triangle, Frame)
         setPreviewElement({
           ...previewElement,
           width: pos.x - previewElement.x,
@@ -717,20 +746,11 @@ export function useCanvasDrawing({
           }
         }
       } else if (finalElement.type === 'block_arrow') {
-        if (finalElement.width < 0) {
-          finalElement.width = Math.abs(finalElement.width);
-          finalElement.scaleX = -1;
-        }
-        if (finalElement.height < 0) {
-          finalElement.height = Math.abs(finalElement.height);
-          finalElement.scaleY = -1;
-        }
-        
-        // Prevent accidental micro-clicks
-        if (finalElement.width < 5 && finalElement.height < 5) {
-          setIsDrawing(false);
-          setPreviewElement(null);
-          return;
+        // Enforce default size on micro-clicks and ignore scaling flips
+        if (finalElement.width < 10) {
+          finalElement.width = 100;
+          finalElement.height = 40;
+          finalElement.rotation = 0;
         }
       } else if (['arrow', 'line', 'elbow_arrow'].includes(finalElement.type)) {
         const pts = finalElement.points || [0,0,0,0];

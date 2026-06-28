@@ -93,6 +93,8 @@ export default function useKeyboardShortcuts() {
       't': TOOLS.TEXT,
       'n': TOOLS.STICKY_NOTE,
       's': TOOLS.RECTANGLE,
+      'r': TOOLS.RECTANGLE,
+      'o': TOOLS.CIRCLE,
       'l': TOOLS.LINE,
       'p': TOOLS.PEN,
       'c': TOOLS.COMMENT,

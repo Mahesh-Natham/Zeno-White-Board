@@ -4,6 +4,8 @@ import { format, addDays, differenceInDays } from 'date-fns';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link2, PanelRight, Calendar, MessageSquare, Trash2, AlertCircle, ChevronsUp, Equal, ChevronDown, Plus, X, CheckCircle2 } from 'lucide-react';
 import { TimelineTask, TimelineLane, Priority } from '../types';
+import useToolStore from '../../../../../store/toolStore';
+import { TOOLS } from '../../../../../config/constants';
 
 interface TimelineTaskBarProps {
   task: TimelineTask;
@@ -300,8 +302,8 @@ export function TimelineTaskBar({
               e.target.x(-5);
               e.target.getLayer()?.batchDraw();
             }}
-            onMouseEnter={(e: any) => e.target.getStage().container().style.cursor = 'ew-resize'} 
-            onMouseLeave={(e: any) => e.target.getStage().container().style.cursor = 'default'} 
+            onMouseEnter={(e: any) => { if (useToolStore.getState().activeTool !== TOOLS.SELECT) return; e.target.getStage().container().style.cursor = 'ew-resize'; }} 
+            onMouseLeave={(e: any) => { if (useToolStore.getState().activeTool !== TOOLS.SELECT) return; e.target.getStage().container().style.cursor = 'default'; }} 
           />
           <Rect 
             x={task.duration * pixelsPerDay - 5} 
@@ -327,8 +329,8 @@ export function TimelineTaskBar({
               e.target.x(task.duration * pixelsPerDay - 5);
               e.target.getLayer()?.batchDraw();
             }}
-            onMouseEnter={(e: any) => e.target.getStage().container().style.cursor = 'ew-resize'} 
-            onMouseLeave={(e: any) => e.target.getStage().container().style.cursor = 'default'} 
+            onMouseEnter={(e: any) => { if (useToolStore.getState().activeTool !== TOOLS.SELECT) return; e.target.getStage().container().style.cursor = 'ew-resize'; }} 
+            onMouseLeave={(e: any) => { if (useToolStore.getState().activeTool !== TOOLS.SELECT) return; e.target.getStage().container().style.cursor = 'default'; }} 
           />
         </>
       )}

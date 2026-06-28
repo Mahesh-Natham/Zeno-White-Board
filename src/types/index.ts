@@ -22,7 +22,7 @@ export interface Board {
   isStarred?: boolean;
 }
 
-export type ElementType = 'rectangle' | 'circle' | 'line' | 'arrow' | 'text' | 'sticky_note' | 'image' | 'pencil' | 'google_workspace';
+export type ElementType = 'rectangle' | 'circle' | 'line' | 'arrow' | 'text' | 'sticky_note' | 'image' | 'pencil' | 'google_workspace' | 'doc' | 'timeline' | 'kanban' | 'table';
 
 export interface BaseElement {
   id: string;
@@ -87,7 +87,14 @@ export interface GoogleWorkspaceElement extends BaseElement {
   height: number;
 }
 
-export type CanvasElement = ShapeElement | TextElement | StickyNoteElement | LineElement | ImageElement | GoogleWorkspaceElement;
+export interface DocElement extends BaseElement {
+  type: 'doc';
+  content: string;
+  width: number;
+  height: number;
+}
+
+export type CanvasElement = ShapeElement | TextElement | StickyNoteElement | LineElement | ImageElement | GoogleWorkspaceElement | DocElement;
 
 export interface Viewport {
   x: number;

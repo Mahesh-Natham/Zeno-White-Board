@@ -36,6 +36,7 @@ import ColorFlyout from './flyouts/ColorFlyout';
 import FrameFlyout from './flyouts/FrameFlyout';
 import PenFlyout from './flyouts/PenFlyout';
 import CreationFlyout from './flyouts/CreationFlyout';
+import ReactionFlyout from './flyouts/ReactionFlyout';
 
 const TOOL_GROUPS = [
   { id: 'select_group', icon: MousePointer2, label: 'Select / Pan', shortcut: 'V/H', subTools: [
@@ -49,8 +50,7 @@ const TOOL_GROUPS = [
   { id: 'shape_group', icon: Square, label: 'Shape', shortcut: 'S', hasFlyout: true, defaultSubTool: TOOLS.RECTANGLE },
   { id: 'pen_group', icon: Pen, label: 'Pen', shortcut: 'P', hasFlyout: true, defaultSubTool: TOOLS.PEN },
   { id: 'frames_group', icon: Frame, label: 'Frames', shortcut: 'F', hasFlyout: true },
-  { id: 'reactions', icon: SmilePlus, label: 'Reactions' },
-  { id: TOOLS.COMMENT, icon: MessageSquare, label: 'Comment', shortcut: 'C' },
+  { id: 'reactions', icon: SmilePlus, label: 'Reactions', hasFlyout: true },
   { id: 'creation_group', icon: Blocks, label: 'Creation tools', hasFlyout: true },
   { id: 'more_apps', icon: Plus, label: 'More Tools', hasFlyout: true, customClass: 'bg-[#EFF6FF] text-[#2563EB] hover:bg-[#DBEAFE] hover:text-[#1D4ED8]' },
 ];
@@ -64,13 +64,25 @@ export default function LeftToolbar() {
   const [isDragging, setIsDragging] = useState(false);
   const [orientation, setOrientation] = useState('vertical');
   const dragRef = useRef(null);
+  const toolbarRef = useRef(null);
 
   useEffect(() => {
     const handleResize = () => {
       // Keep it within bounds roughly if window resizes
     };
+    
+    const handleOutsideClick = (e) => {
+      if (toolbarRef.current && !toolbarRef.current.contains(e.target)) {
+        setOpenFlyout(null);
+      }
+    };
+    
     window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    document.addEventListener('pointerdown', handleOutsideClick);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      document.removeEventListener('pointerdown', handleOutsideClick);
+    };
   }, []);
 
   const handlePointerDown = (e) => {
@@ -147,6 +159,7 @@ export default function LeftToolbar() {
 
   return (
     <div 
+      ref={toolbarRef}
       className={`absolute flex z-10 pointer-events-auto ${orientation === 'vertical' ? 'flex-row items-start' : 'flex-col items-start'}`}
       style={{ left: position.x, top: position.y }}
     >
@@ -214,6 +227,15 @@ export default function LeftToolbar() {
           {openFlyout === 'pen_group' && <PenFlyout activeTool={activeTool} onSelect={handleSubToolClick} activeColor={defaultStyles.stroke} onSelectColor={(c) => { setDefaultStyle('stroke', c); }} activeWidth={defaultStyles.strokeWidth} onSelectWidth={(w) => { setDefaultStyle('strokeWidth', w); }} />}
           {openFlyout === TOOLS.STICKY_NOTE && <ColorFlyout activeColor={defaultStyles.fill} onSelectColor={(c) => { setDefaultStyle('fill', c); setOpenFlyout(null); }} />}
           {openFlyout === 'frames_group' && <FrameFlyout onSelect={handleFrameSelect} />}
+          {openFlyout === 'reactions' && (
+            <ReactionFlyout 
+              onSelect={(emoji) => { 
+                useToolStore.getState().setSelectedReaction(emoji);
+                setActiveTool(TOOLS.REACTION); 
+                setOpenFlyout(null); 
+              }} 
+            />
+          )}
           {openFlyout === 'creation_group' && <CreationFlyout onSelect={(toolId) => { setActiveTool(toolId); setOpenFlyout(null); }} />}
           {openFlyout === 'more_apps' && <MoreToolsFlyout onSelect={(toolId) => { setActiveTool(toolId); setOpenFlyout(null); }} />}
           

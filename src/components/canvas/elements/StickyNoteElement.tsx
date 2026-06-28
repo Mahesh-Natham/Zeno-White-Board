@@ -34,6 +34,7 @@ export default function StickyNoteElement({ element, isEditing, onDoubleClick}) 
         stroke={element.stroke}
         strokeWidth={element.strokeWidth}
         opacity={element.opacity}
+        cornerRadius={10}
         shadowColor="rgba(0,0,0,0.15)"
         shadowBlur={10}
         shadowOffset={{ x: 2, y: 4 }}

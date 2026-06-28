@@ -13,23 +13,18 @@ export default function ElbowArrowElement({ element, isSelected }) {
   const x2 = pts[2] ?? x1;
   const y2 = pts[3] ?? y1;
 
-  // Calculate bezier control points for a smooth curve
-  // We use the same aesthetic as the timeline: curving out from the start and end by 40% of the distance
+  // Orthogonal routing calculations
   const dx = x2 - x1;
   const dy = y2 - y1;
   const isHorizontal = Math.abs(dx) > Math.abs(dy);
   
-  const cp1X = isHorizontal ? x1 + dx * 0.4 : x1;
-  const cp1Y = isHorizontal ? y1 : y1 + dy * 0.4;
-  const cp2X = isHorizontal ? x2 - dx * 0.4 : x2;
-  const cp2Y = isHorizontal ? y2 : y2 - dy * 0.4;
-  
-  const bezierPoints = [x1, y1, cp1X, cp1Y, cp2X, cp2Y, x2, y2];
+  const orthogonalPoints = isHorizontal
+    ? [x1, y1, (x1 + x2) / 2, y1, (x1 + x2) / 2, y2, x2, y2]
+    : [x1, y1, x1, (y1 + y2) / 2, x2, (y1 + y2) / 2, x2, y2];
 
-  // Cubic bezier midpoint calculation (t = 0.5)
-  const t = 0.5;
-  const midX = (1 - t) ** 3 * x1 + 3 * (1 - t) ** 2 * t * cp1X + 3 * (1 - t) * t ** 2 * cp2X + t ** 3 * x2;
-  const midY = (1 - t) ** 3 * y1 + 3 * (1 - t) ** 2 * t * cp1Y + 3 * (1 - t) * t ** 2 * cp2Y + t ** 3 * y2;
+  // Midpoint calculation for the delete button
+  const midX = (x1 + x2) / 2;
+  const midY = (y1 + y2) / 2;
 
   const handleDelete = (e) => {
     e.stopPropagation();
@@ -45,12 +40,12 @@ export default function ElbowArrowElement({ element, isSelected }) {
       name="board-element"
     >
       <Arrow
-        points={bezierPoints}
+        points={orthogonalPoints}
         stroke={isSelected ? '#ef4444' : element.stroke}
         strokeWidth={isSelected ? 2.5 : element.strokeWidth}
         dash={element.dash}
         opacity={element.opacity}
-        bezier={true}
+        bezier={false}
         pointerLength={10}
         pointerWidth={10}
         fill={isSelected ? '#ef4444' : element.stroke} // arrow head fill matches stroke

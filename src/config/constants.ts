@@ -33,6 +33,8 @@ export const TOOLS = {
   KANBAN: 'kanban',
   TABLE: 'table',
   GOOGLE_WORKSPACE: 'google_workspace',
+  REACTION: 'reaction',
+  DOC: 'doc',
 };
 
 export const CURSOR_COLORS = [

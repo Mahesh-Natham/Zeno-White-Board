@@ -9,6 +9,27 @@
 
 Next steps for Verification: Manual verification of network batching via DevTools and multiplayer simulation.
 
+## Word Document Feature (Completed)
+
+- **Tiptap Editor Core**: Implemented `DocElement.tsx` using `@tiptap/react` to provide a robust rich-text editing experience inside the canvas. Included extensions for underline and text alignment.
+- **Dynamic Render Modes**: The document defaults to a 600x800 floating canvas element. It includes a Maximize button in the header that utilizes a React Portal (`createPortal`) to break the editor out of the Konva overlay, filling the screen with a "Print Layout" view.
+- **Auto-Syncing**: Wired up Tiptap's `onUpdate` hook to emit `onChange` events, allowing real-time multi-player syncing of the document's HTML content.
+- **Store & Tool State**: Added `maximizedElementId` to `uiStore.ts`, exported `TOOLS.DOC`, and hooked the tool into the `MoreToolsFlyout.tsx` and `CreationFlyout.tsx`.
+- **Canvas Instantiation**: Updated `useCanvasDrawing.ts` to instantiate a new `doc` element on a single click when the tool is active.
+
+## MiroClone Canvas & UI Enhancements (Completed)
+
+- **Elbow Arrow orthogonal routing**: Changed bezier curves to orthogonal paths with strict 90-degree corners in `ElbowArrowElement.tsx`.
+- **Rotatable Block Arrows**: Enabled block arrow rotation via an offset group configuration, and enabled length resizing using the standard `handleDotDragStart` loop in `useCanvasDrawing.ts`.
+- **Rounded Sticky Notes**: Adjusted the `cornerRadius` on `StickyNoteElement.tsx` to 10px.
+- **Outside-Click Toolbar Close**: Hooked up `pointerdown` listeners on `LeftToolbar.tsx` to automatically retract flyouts on outside clicks.
+- **Keyboard Shortcuts**: Added `R` (Rectangle) and `O` (Circle) tool mappings to `useKeyboardShortcuts.ts`.
+- **Cursor State Persistence**: Synchronized the crosshair cursor via `InfiniteCanvas.tsx` and the Timeline DOM overlays to ensure it stays active during drawing interactions while respecting `activeTool === TOOLS.SELECT` states.
+- **Smooth Marker**: Updated `freehandUtils.ts` to use `smoothing: 0.75` and `streamline: 0.6`, rendering with `<Path>` in `MarkerElement.tsx`.
+- **Darker Frame Borders**: Changed the `<Rect>` stroke from `#d1d5db` to `#9ca3af` inside `FrameElement.tsx`.
+- **Reaction Tool Toolset**: Created `ReactionFlyout.tsx` and mapped emoji selection into `LeftToolbar.tsx` under the new `TOOLS.REACTION` identifier. Handled automatic 60x60 transparent text generation in `useCanvasDrawing.ts`.
+- **Toolbar Cleanup**: Removed obsolete Creation items (`prototype`, `doc`, `slides`, `engage`, `flows`) and More Tools items (`prototype`, `engage`, `diagram`) from the flyout definitions to streamline the UI.
+
 ## Canvas Interaction Refactor (Completed)
 
 - **Transient UI State (`src/store/uiStore.ts`)**: Introduced `uiStore` with `dragOffsets` to manage lightweight, 60fps local drag/select coordinates without mutating the main synchronization `canvasStore`.

@@ -9,12 +9,9 @@ import {
 } from 'lucide-react';
 
 const FORMATS = [
-  { id: 'prototype', icon: Smartphone, label: 'Prototype', desc: 'Visualize concepts and build interactive flows', badge: 'Add-on', badgeColor: 'bg-[#E0E7FF] text-[#4F46E5]', iconColor: 'text-[#8B5CF6]', borderColor: 'border-[#8B5CF6]/30' },
-  { id: 'diagram', icon: Network, label: 'Diagram', desc: 'Visualize processes & systems with a diagram', iconColor: 'text-[#EA580C]', borderColor: 'border-[#EA580C]/30' },
   { id: 'google_workspace', icon: AppWindow, label: 'Google Workspace', desc: 'Embed Docs, Sheets, and Slides', badge: 'New', badgeColor: 'bg-green-100 text-green-700', iconColor: 'text-green-600', borderColor: 'border-green-600/30' },
   { id: 'doc', icon: FileText, label: 'Doc', desc: 'Organise your thoughts in a document', iconColor: 'text-[#0284C7]', borderColor: 'border-[#0284C7]/30' },
-  { id: 'slides', icon: MonitorPlay, label: 'Slides', desc: 'Showcase your work with slides', iconColor: 'text-[#DC2626]', borderColor: 'border-[#DC2626]/30' },
-  { id: 'engage', icon: Activity, label: 'Engage activities', desc: 'Run mobile-friendly, interactive sessions', badge: 'Free beta', badgeColor: 'bg-gray-100 text-gray-700', iconColor: 'text-[#DC2626]', borderColor: 'border-[#DC2626]/30' },
+  { id: 'slides', icon: MonitorPlay, label: 'Slides', desc: 'Showcase your work with slides', iconColor: 'text-[#DC2626]', borderColor: 'border-[#DC2626]/30' }
 ];
 
 export default function MoreToolsFlyout({ onSelect }) {

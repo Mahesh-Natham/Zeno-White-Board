@@ -19,6 +19,7 @@ import { TimelineElement } from './TimelineElement';
 import KanbanElement from './kanban/KanbanElement';
 import TableElement from './table/TableElement';
 import GoogleWorkspaceElement from './GoogleWorkspaceElement';
+import DocElement from './DocElement';
 import { CanvasElementErrorBoundary } from '../../shared/ErrorBoundary';
 
 import { getSmartConnectorPoints } from '../../../utils/canvasUtils';
@@ -120,6 +121,8 @@ function ElementRendererInner({
       return <TableElement {...commonProps} />;
     case TOOLS.GOOGLE_WORKSPACE:
       return <GoogleWorkspaceElement {...commonProps} />;
+    case TOOLS.DOC:
+      return <DocElement {...commonProps} />;
     case TOOLS.PEN:
     case TOOLS.SMART_DRAWING:
     case TOOLS.SMART_ARROW:

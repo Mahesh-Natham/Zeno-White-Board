@@ -44,8 +44,8 @@ export function getFreehandPath(points, size = 16, isMarker = false) {
   const stroke = getStroke(formattedPoints, {
     size: size,
     thinning: isMarker ? 0 : 0.5,
-    smoothing: 0.5,
-    streamline: 0.5,
+    smoothing: isMarker ? 0.75 : 0.5,
+    streamline: isMarker ? 0.6 : 0.5,
     easing: (t) => t,
     start: {
       taper: isMarker ? 0 : size,

@@ -321,7 +321,7 @@ const InfiniteCanvas = forwardRef(({ board, isReadOnly }: any, ref) => {
               onChange={handleTransformerChange} 
             />
           )}
-          {!isReadOnly && (selectedIds.length === 1 || hoveredElementId) && !isPanDragging && (
+          {!isReadOnly && activeTool === TOOLS.SELECT && (selectedIds.length === 1 || hoveredElementId) && !isPanDragging && (
             <ConnectionDots 
               selectedIds={selectedIds}
               hoveredElementId={hoveredElementId}

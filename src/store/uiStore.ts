@@ -12,6 +12,8 @@ interface UiState {
   embedCoordinates: { x: number, y: number } | null;
   openEmbedModal: (coords: { x: number, y: number }) => void;
   closeEmbedModal: () => void;
+  maximizedElementId: string | null;
+  toggleMaximize: (id: string) => void;
 }
 
 const useUiStore = create<UiState>((set) => ({
@@ -26,6 +28,8 @@ const useUiStore = create<UiState>((set) => ({
   embedCoordinates: null,
   openEmbedModal: (coords) => set({ embedModalOpen: true, embedCoordinates: coords }),
   closeEmbedModal: () => set({ embedModalOpen: false, embedCoordinates: null }),
+  maximizedElementId: null,
+  toggleMaximize: (id) => set((state) => ({ maximizedElementId: state.maximizedElementId === id ? null : id })),
 }));
 
 export default useUiStore;

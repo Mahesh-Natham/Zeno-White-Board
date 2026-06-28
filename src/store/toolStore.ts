@@ -20,6 +20,8 @@ interface DefaultStyles {
 interface ToolState {
   activeTool: ToolType;
   setActiveTool: (tool: ToolType) => void;
+  selectedReaction: string;
+  setSelectedReaction: (reaction: string) => void;
   defaultStyles: DefaultStyles;
   setDefaultStyle: <K extends keyof DefaultStyles>(key: K, value: DefaultStyles[K]) => void;
 }
@@ -27,6 +29,8 @@ interface ToolState {
 const useToolStore = create<ToolState>((set) => ({
   activeTool: TOOLS.SELECT,
   setActiveTool: (tool) => set({ activeTool: tool }),
+  selectedReaction: '👍',
+  setSelectedReaction: (reaction) => set({ selectedReaction: reaction }),
   
   defaultStyles: {
     fill: 'transparent',

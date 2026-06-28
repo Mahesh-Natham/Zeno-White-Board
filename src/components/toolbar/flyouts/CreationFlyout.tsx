@@ -11,16 +11,11 @@ import {
 } from 'lucide-react';
 
 const CREATION_TOOLS = [
-  { id: 'prototype', icon: Smartphone, label: 'Prototype', badge: 'Add-on', badgeColor: 'bg-[#E0E7FF] text-[#4F46E5]', iconColor: 'text-[#8B5CF6]', borderColor: 'border-[#8B5CF6]/30' },
   { id: 'diagram', icon: Network, label: 'Diagram', iconColor: 'text-[#EA580C]', borderColor: 'border-[#EA580C]/30' },
   { id: 'table', icon: Table, label: 'Table', iconColor: 'text-[#16A34A]', borderColor: 'border-[#16A34A]/30' },
   { id: 'timeline', icon: GitCommit, label: 'Timeline', iconColor: 'text-[#16A34A]', borderColor: 'border-[#16A34A]/30' },
   { id: 'kanban', icon: Kanban, label: 'Kanban', iconColor: 'text-[#16A34A]', borderColor: 'border-[#16A34A]/30' },
-  { id: 'doc', icon: FileText, label: 'Doc', iconColor: 'text-[#0284C7]', borderColor: 'border-[#0284C7]/30' },
-  { id: 'slides', icon: MonitorPlay, label: 'Slides', iconColor: 'text-[#DC2626]', borderColor: 'border-[#DC2626]/30' },
-  { id: 'engage', icon: Activity, label: 'Engage activities', badge: 'Free beta', badgeColor: 'bg-gray-100 text-gray-700', iconColor: 'text-[#DC2626]', borderColor: 'border-[#DC2626]/30' },
-  { isDivider: true },
-  { id: 'flows', icon: Workflow, label: 'Flows', badge: 'New', badgeColor: 'bg-gray-100 text-gray-700', iconColor: 'text-[#8B5CF6]', borderColor: 'border-[#8B5CF6]/30' }
+  { id: 'doc', icon: FileText, label: 'Doc', iconColor: 'text-[#0284C7]', borderColor: 'border-[#0284C7]/30' }
 ];
 
 export default function CreationFlyout({ onSelect }) {

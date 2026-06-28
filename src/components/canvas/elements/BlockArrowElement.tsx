@@ -23,6 +23,7 @@ export default function BlockArrowElement({ element, onDoubleClick}) {
       width={element.width}
       height={element.height}
       rotation={element.rotation}
+      offsetY={element.height / 2}
       scaleX={element.scaleX}
       scaleY={element.scaleY}
       onDblClick={(e) => {

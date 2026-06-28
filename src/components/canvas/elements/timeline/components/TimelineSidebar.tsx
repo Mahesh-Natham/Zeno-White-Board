@@ -3,6 +3,8 @@ import { Html } from 'react-konva-utils';
 import { Plus, MoreVertical, Trash2, ChevronDown, Check, Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
 import { format, startOfMonth, addMonths, startOfWeek, endOfWeek, eachDayOfInterval, isSameMonth, isSameDay, isAfter, isBefore, subMonths, differenceInDays } from 'date-fns';
 import { TimelineLane, TimelineTask, ViewScale } from '../types';
+import useToolStore from '../../../../../store/toolStore';
+import { TOOLS } from '../../../../../config/constants';
 
 interface TimelineSidebarProps {
   elementId: string;
@@ -279,8 +281,8 @@ export function TimelineSidebar({
                        fontSize={14}
                        fill="#6b7280"
                        fontStyle="bold"
-                       onMouseEnter={(e: any) => e.target.getStage().container().style.cursor = 'pointer'}
-                       onMouseLeave={(e: any) => e.target.getStage().container().style.cursor = 'default'}
+                       onMouseEnter={(e: any) => { if (useToolStore.getState().activeTool !== TOOLS.SELECT) return; e.target.getStage().container().style.cursor = 'pointer'; }}
+                       onMouseLeave={(e: any) => { if (useToolStore.getState().activeTool !== TOOLS.SELECT) return; e.target.getStage().container().style.cursor = 'default'; }}
                      />
                    )}
 

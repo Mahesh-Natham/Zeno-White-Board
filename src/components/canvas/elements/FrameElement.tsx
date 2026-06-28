@@ -36,7 +36,7 @@ export default function FrameElement({ element, onDoubleClick}) {
         width={element.width}
         height={element.height}
         fill="transparent" // empty inside so you can click items inside it
-        stroke="#d1d5db" // light gray
+        stroke="#9ca3af" // darker gray
         strokeWidth={2}
         dash={[10, 5]} // dashed border for frames
         opacity={element.opacity}
