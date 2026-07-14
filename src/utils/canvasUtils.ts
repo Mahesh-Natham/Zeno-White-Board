@@ -2,12 +2,14 @@ export function getBoundingBox(element) {
   if (!element) return null;
   const x = element.x || 0;
   const y = element.y || 0;
-  let w = element.width || 0;
-  let h = element.height || 0;
+  const scaleX = element.scaleX || 1;
+  const scaleY = element.scaleY || 1;
+  let w = (element.width || 0) * scaleX;
+  let h = (element.height || 0) * scaleY;
   
   if (!w || !h) {
-    if (['kanban', 'table'].includes(element.type)) { w = w || 1000; h = h || 700; }
-    else if (element.type === 'timeline') { w = w || 900; h = h || 600; }
+    if (['kanban', 'table'].includes(element.type)) { w = 1000 * scaleX; h = 700 * scaleY; }
+    else if (element.type === 'timeline') { w = 900 * scaleX; h = 600 * scaleY; }
   }
 
   // For arrows/lines that don't have width/height but have points
@@ -48,12 +50,14 @@ export function getElementConnectionNodes(el) {
   if (!el) return null;
   const x = el.x || 0;
   let y = el.y || 0;
-  let w = el.width || 0;
-  let h = el.height || 0;
+  const scaleX = el.scaleX || 1;
+  const scaleY = el.scaleY || 1;
+  let w = (el.width || 0) * scaleX;
+  let h = (el.height || 0) * scaleY;
   
   if (!w || !h) {
-    if (['kanban', 'table'].includes(el.type)) { w = w || 1000; h = h || 700; }
-    else if (el.type === 'timeline') { w = w || 900; h = h || 600; }
+    if (['kanban', 'table'].includes(el.type)) { w = 1000 * scaleX; h = 700 * scaleY; }
+    else if (el.type === 'timeline') { w = 900 * scaleX; h = 600 * scaleY; }
   }
 
   if (['kanban', 'table', 'timeline'].includes(el.type)) {
@@ -61,10 +65,10 @@ export function getElementConnectionNodes(el) {
   }
 
   return [
-    { x: x + w / 2, y: y },         // Top
-    { x: x + w, y: y + h / 2 },     // Right
-    { x: x + w / 2, y: y + h },     // Bottom
-    { x: x, y: y + h / 2 },         // Left
+    { x: x + w / 2, y: y, dir: 'up' },         // Top
+    { x: x + w, y: y + h / 2, dir: 'right' },  // Right
+    { x: x + w / 2, y: y + h, dir: 'down' },   // Bottom
+    { x: x, y: y + h / 2, dir: 'left' },       // Left
   ];
 }
 
@@ -79,6 +83,40 @@ export function getSmartConnectorPoints(arrow, elements) {
 
   const startNodes = getElementConnectionNodes(startEl);
   const endNodes = getElementConnectionNodes(endEl);
+
+  const getControlPoints = (start, end) => {
+    // Generate CP based on direction and distance
+    const dist = Math.max(30, Math.hypot(end.x - start.x, end.y - start.y) * 0.3);
+    
+    let cp1x = start.x; let cp1y = start.y;
+    if (start.dir === 'up') cp1y -= dist;
+    else if (start.dir === 'down') cp1y += dist;
+    else if (start.dir === 'left') cp1x -= dist;
+    else if (start.dir === 'right') cp1x += dist;
+    else {
+      // Fallback if no dir (e.g. for mouse position end node)
+      if (Math.abs(end.x - start.x) > Math.abs(end.y - start.y)) {
+        cp1x += (end.x > start.x ? dist : -dist);
+      } else {
+        cp1y += (end.y > start.y ? dist : -dist);
+      }
+    }
+
+    let cp2x = end.x; let cp2y = end.y;
+    if (end.dir === 'up') cp2y -= dist;
+    else if (end.dir === 'down') cp2y += dist;
+    else if (end.dir === 'left') cp2x -= dist;
+    else if (end.dir === 'right') cp2x += dist;
+    else {
+      if (Math.abs(start.x - end.x) > Math.abs(start.y - end.y)) {
+        cp2x += (start.x > end.x ? dist : -dist);
+      } else {
+        cp2y += (start.y > end.y ? dist : -dist);
+      }
+    }
+
+    return [start.x, start.y, cp1x, cp1y, cp2x, cp2y, end.x, end.y];
+  };
 
   if (startNodes && endNodes) {
     let minDist = Infinity;
@@ -95,7 +133,7 @@ export function getSmartConnectorPoints(arrow, elements) {
         }
       }
     }
-    return [bestStart.x, bestStart.y, bestEnd.x, bestEnd.y];
+    return getControlPoints(bestStart, bestEnd);
   }
 
   // Fallback if only one element is connected
@@ -109,7 +147,7 @@ export function getSmartConnectorPoints(arrow, elements) {
         bestStart = sNode;
       }
     }
-    return [bestStart.x, bestStart.y, endX, endY];
+    return getControlPoints(bestStart, { x: endX, y: endY });
   }
 
   if (!startNodes && endNodes) {
@@ -122,7 +160,7 @@ export function getSmartConnectorPoints(arrow, elements) {
         bestEnd = eNode;
       }
     }
-    return [startX, startY, bestEnd.x, bestEnd.y];
+    return getControlPoints({ x: startX, y: startY }, bestEnd);
   }
 
   return [startX, startY, endX, endY];

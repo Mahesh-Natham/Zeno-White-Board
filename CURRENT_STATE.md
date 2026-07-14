@@ -9,6 +9,12 @@
 
 Next steps for Verification: Manual verification of network batching via DevTools and multiplayer simulation.
 
+## Arrow & Connector Refactoring (Completed)
+
+- **Smart Connectors**: Updated `useConnectors.ts` to default programmatic links to standard arrows, fixing a bug where they forced elbow arrows.
+- **Math Engine**: Created `arrowUtils.ts` to centralize and decouple calculation logic for `getStandardArrowPoints`, `getElbowArrowPoints`, and `getBlockArrowTransform`.
+- **Component Refactoring**: Cleaned up `ElbowArrowElement.tsx`, `BlockArrowElement.tsx`, `ArrowElement.tsx`, and `useCanvasDrawing.ts` to utilize the new centralized arrow utility functions.
+
 ## Word Document Feature (Completed)
 
 - **Tiptap Editor Core**: Implemented `DocElement.tsx` using `@tiptap/react` to provide a robust rich-text editing experience inside the canvas. Included extensions for underline and text alignment.

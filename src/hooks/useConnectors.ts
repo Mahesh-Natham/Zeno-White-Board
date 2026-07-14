@@ -2,7 +2,7 @@ import useCanvasStore from '../store/canvasStore';
 import useAuthStore from '../store/authStore';
 import useToolStore from '../store/toolStore';
 import { TOOLS } from '../config/constants';
-import { createDefaultElement } from '../utils/canvasUtils';
+import { createDefaultElement } from '../utils/elementFactory';
 
 /**
  * High-level hook for programmatic management of canvas connectors.
@@ -19,8 +19,9 @@ export function useConnectors() {
    * @param sourceId The ID of the starting element
    * @param targetId The ID of the ending element
    * @param options Optional styles for the connector
+   * @param arrowType The type of connector (default: TOOLS.ARROW)
    */
-  const createConnection = (sourceId: string, targetId: string, options: any = {}) => {
+  const createConnection = (sourceId: string, targetId: string, options: any = {}, arrowType: string = TOOLS.ARROW) => {
     if (!elements[sourceId] || !elements[targetId]) {
       console.warn('createConnection: Source or Target element not found.');
       return null;
@@ -31,7 +32,7 @@ export function useConnectors() {
     const startX = elements[sourceId].x + (elements[sourceId].width || 100) / 2;
     const startY = elements[sourceId].y + (elements[sourceId].height || 100) / 2;
 
-    const newConnector = createDefaultElement(TOOLS.ELBOW_ARROW, startX, startY, userId, defaultStyles);
+    const newConnector = createDefaultElement(arrowType, startX, startY, userId, defaultStyles);
     
     // Explicitly bind the logical ends
     newConnector.startElementId = sourceId;

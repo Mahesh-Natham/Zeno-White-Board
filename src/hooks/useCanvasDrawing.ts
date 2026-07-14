@@ -6,6 +6,7 @@ import useUiStore from '../store/uiStore';
 import { TOOLS, ZOOM_STEP, MIN_ZOOM, MAX_ZOOM } from '../config/constants';
 import { createDefaultElement } from '../utils/elementFactory';
 import { simplifyPoints } from '../utils/canvasUtils';
+import { getBlockArrowTransform } from '../utils/arrowUtils';
 
 interface UseCanvasDrawingProps {
   stageRef: React.RefObject<any>;
@@ -93,7 +94,7 @@ export function useCanvasDrawing({
     const userId = userProfile?.uid || 'anonymous';
     const { defaultStyles } = useToolStore.getState();
     
-    let newElement = createDefaultElement(TOOLS.ELBOW_ARROW, pos.x, pos.y, userId, defaultStyles);
+    let newElement = createDefaultElement(TOOLS.ARROW, pos.x, pos.y, userId, defaultStyles);
     newElement.points = [0, 0, 0, 0];
     newElement.startElementId = elementId;
     newElement.dash = [10, 10]; // Dotted line while drawing
@@ -503,10 +504,7 @@ export function useCanvasDrawing({
           points: [0, 0, pos.x - previewElement.x, pos.y - previewElement.y],
         });
       } else if (activeTool === 'block_arrow') {
-        const dx = pos.x - previewElement.x;
-        const dy = pos.y - previewElement.y;
-        const length = Math.sqrt(dx * dx + dy * dy);
-        const rotation = (Math.atan2(dy, dx) * 180) / Math.PI;
+        const { rotation, length } = getBlockArrowTransform(previewElement.x, previewElement.y, pos.x, pos.y);
         setPreviewElement({
           ...previewElement,
           width: length,
@@ -697,8 +695,8 @@ export function useCanvasDrawing({
             finalShape.type = TOOLS.ARROW;
             finalShape.points = simplified;
           } else if (activeTool === TOOLS.SMART_CONNECTOR) {
-            finalShape.type = TOOLS.ELBOW_ARROW;
-            // Elbow arrow only uses start and end points [x1, y1, x2, y2]
+            finalShape.type = TOOLS.ARROW;
+            // Arrow only uses start and end points [x1, y1, x2, y2]
             finalShape.points = [simplified[0], simplified[1], simplified[simplified.length - 2], simplified[simplified.length - 1]];
             finalShape.stroke = '#fdba74'; // Light orange connector color
           }

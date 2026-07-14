@@ -3,6 +3,7 @@ import { Html } from 'react-konva-utils';
 
 import { Trash2 } from 'lucide-react';
 import useCanvasStore from '../../../store/canvasStore';
+import { getElbowArrowPoints } from '../../../utils/arrowUtils';
 
 export default function ElbowArrowElement({ element, isSelected }) {
   // We receive element.points as [x1, y1, x2, y2]
@@ -13,14 +14,7 @@ export default function ElbowArrowElement({ element, isSelected }) {
   const x2 = pts[2] ?? x1;
   const y2 = pts[3] ?? y1;
 
-  // Orthogonal routing calculations
-  const dx = x2 - x1;
-  const dy = y2 - y1;
-  const isHorizontal = Math.abs(dx) > Math.abs(dy);
-  
-  const orthogonalPoints = isHorizontal
-    ? [x1, y1, (x1 + x2) / 2, y1, (x1 + x2) / 2, y2, x2, y2]
-    : [x1, y1, x1, (y1 + y2) / 2, x2, (y1 + y2) / 2, x2, y2];
+  const orthogonalPoints = getElbowArrowPoints(x1, y1, x2, y2);
 
   // Midpoint calculation for the delete button
   const midX = (x1 + x2) / 2;

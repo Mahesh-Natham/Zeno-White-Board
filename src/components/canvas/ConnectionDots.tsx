@@ -80,7 +80,7 @@ export default function ConnectionDots({ selectedIds, hoveredElementId, elements
     if (e.evt && e.evt.pointerId !== undefined && e.evt.target && e.evt.target.setPointerCapture) {
       try { e.evt.target.setPointerCapture(e.evt.pointerId); } catch(err) {}
     }
-    setActiveTool(TOOLS.ELBOW_ARROW);
+    setActiveTool(TOOLS.ARROW);
     if (onDragStart) {
       onDragStart(bounds.elementId);
     }

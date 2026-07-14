@@ -1,4 +1,5 @@
 import { Group, Line } from 'react-konva';
+import { getBlockArrowTransform } from '../../../utils/arrowUtils';
 
 export default function BlockArrowElement({ element, onDoubleClick}) {
   const w = element.width;
